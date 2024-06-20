@@ -1,0 +1,39 @@
+services:
+    api-laravel11:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: api-laravel11
+        container_name: api-laravel11
+        ports:
+            - "${APP_PORT:-8000}:80"
+        volumes:
+            - .:/var/www/html
+            - /var/www/html/vendor
+        depends_on:
+            - mysql
+        networks:
+            - connection
+    mysql:
+        image: "mysql/mysql-server:8.0"
+        container_name: mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+            MYSQL_ROO_HOST: ${DB_HOST:-mysql}
+            MYSQL_DATABASE: ${DB_DATABASE:-laravel11}
+            MYSQL_USER: ${DB_USERNAME:-root}
+            MYSQL_PASSWORD: ${DB_PASSWORD:-root}
+        ports:
+            - "${DB_PORT:-3306}:3306"
+        volumes:
+            - "db-mysql:/var/lib/mysql"
+        networks:
+            - connection
+networks:
+    connection:
+        driver: bridge
+volumes:
+    db-mysql:
+        driver: local
+        external: false
