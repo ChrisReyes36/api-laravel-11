@@ -12,8 +12,6 @@ services:
             - /var/www/html/vendor
         depends_on:
             - mysql
-        networks:
-            - connection
     mysql:
         image: "mysql/mysql-server:8.0"
         container_name: mysql
@@ -28,11 +26,6 @@ services:
             - "${DB_PORT:-3306}:3306"
         volumes:
             - "db-mysql:/var/lib/mysql"
-        networks:
-            - connection
-networks:
-    connection:
-        driver: bridge
 volumes:
     db-mysql:
         driver: local
